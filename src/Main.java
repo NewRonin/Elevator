@@ -1,3 +1,4 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.function.DoubleToIntFunction;
 
@@ -11,13 +12,29 @@ public class Main {
 		
 		//Properties initializing
 		
-		setProperities(properties);
+		//Every building has at least 1 floor, sets default floor at 1st level
+		int floor = 1;
+		
+		try {
+			setProperities(properties);
+		}
+		catch (InputMismatchException e) {
+			System.out.println("Wrong properities input!");
+			
+		}
 		
 		//Elevator initializing
 		
 		System.out.println("Enter the staring floor");
 		
-		int floor = in.nextInt();
+		try {
+			floor = in.nextInt();
+			//If starting floor doens't match the max height of building
+			if (floor > properties.getHeight()) throw new InputMismatchException();
+		}
+		catch (InputMismatchException e) {
+			System.out.println("Wrong floor number input!");
+		}
 		
 		Elevator elevator1 = new Elevator(floor, properties.getHeight(), "Elevator 1");
 		Elevator elevator2 = new Elevator(floor, properties.getHeight(), "Elevator 2");
@@ -58,13 +75,19 @@ public class Main {
 			} catch (InterruptedException e) {
 				System.out.println("Elevator velocity error");
 			}
-			elevator2.move();
-			elevator1.move();
+			
+			try {
+				elevator2.move();
+				elevator1.move();
+			}
+			catch (ArrayIndexOutOfBoundsException e) {
+				System.out.println("Unexpected error in evelators' work");
+			}
 		}
 		
 	}
 	
-	public static void setProperities(GenProperities properties) {
+	public static void setProperities(GenProperities properties) throws InputMismatchException {
 		
 		System.out.println("Enter the height of building");
 		
@@ -74,9 +97,7 @@ public class Main {
 		
 		properties.setSpan(in.nextDouble());
 		
-		/*Since the velocity of elevator is not required,
-		 * I've hardcoded it
-		*/
+		//The velocity of elevator was not required, but it's actually important
 		System.out.println("Enter the time required by elevator to pass one floor (in seconds)");
 		properties.setVelocity(in.nextInt());
 		

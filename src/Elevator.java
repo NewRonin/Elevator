@@ -19,7 +19,7 @@ public class Elevator {
 		this.requests = this.upRequests; //Doesn't create a new object
 	}
 
-	public void request(int floor, int direction) {
+	public void request(int floor, int direction) throws ArrayIndexOutOfBoundsException {
 		
 	    ArrayList<Integer> queue = this.upRequests;;
 	    
@@ -55,7 +55,7 @@ public class Elevator {
 	}
 	
 	// Moves to the closest floor
-	public void move() {
+	public void move() throws ArrayIndexOutOfBoundsException{
 		
 		//Don't do anything if nothing is requested
 		if(requests.size() == 0) {
