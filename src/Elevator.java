@@ -5,23 +5,34 @@ public class Elevator {
 	private int floor; // Number of current floor
 	private int direction; // 1 for upper movement, -1 for moving down (in seconds)
 	private String name;
-	private ArrayList<Integer> requests; 
+	private ArrayList<Integer> requests; // A link for current requests queue
+	private ArrayList<Integer> upRequests; 
+	private ArrayList<Integer> downRequests; 
 	
 	
 	public Elevator(int floor, int height, String name) {
 		this.floor = floor;
 		this.name = String.format("[%s]: ", name);
 		this.direction = 1; //Starts with moving up
-		this.requests = new ArrayList<>();
+		this.upRequests = new ArrayList<>();
+		this.downRequests = new ArrayList<>();
+		this.requests = this.upRequests; //Doesn't create a new object
 	}
 
-	public void request(int floor) {
+	public void request(int floor, int direction) {
 		
-		int index = binSearch(this.requests, floor, 0, this.requests.size()-1);
+	    ArrayList<Integer> queue = this.upRequests;;
+	    
+	    
+	    if (direction < 0) {
+	    	queue = this.downRequests;
+	    }
+		
+		int index = binSearch(queue, floor, 0, queue.size()-1);
 		
 		//Prevents copying
-		if(index >= this.requests.size() || this.requests.get(index) != floor) {
-			this.requests.add(index, floor);
+		if(index >= queue.size() || queue.get(index) != floor) {
+			queue.add(index, floor);
 		}
 		
 	}
@@ -57,11 +68,13 @@ public class Elevator {
 		
 		if (i <= 0) {
 			this.direction = 1;
+			this.requests = this.upRequests;
 			i = 0;
 		}
 		
-		if (this.requests.size() > 0 && i >= this.requests.size() - 1 && floor > this.requests.get(i)) {
+		if (this.requests.size() > 0 && i >= this.requests.size() - 1 && floor > this.requests.get(this.requests.size() - 1)) {
 			this.direction = -1;
+			this.requests = this.downRequests;
 			i = this.requests.size() - 1;
 		}
 		

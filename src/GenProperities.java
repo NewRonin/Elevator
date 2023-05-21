@@ -17,9 +17,16 @@ public class GenProperities {
 		this.velocity = velocity;
 	}
 
-	//Returns random request from [1, height] floor
-	public int randRequest() {
-		return random.nextInt(this.height - 1) + 1;
+	/*Returns random request from [1, height] floor 
+	 */
+	public int[] randRequest() {
+		
+		int[] params = new int[2];
+		
+		params[0] = random.nextInt(this.height - 1) + 1;
+		params[1] = random.nextInt(this.height); //Random number for direction
+				
+		return params;
 	}
 
 	public int getVelocity() {

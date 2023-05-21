@@ -28,16 +28,28 @@ public class Main {
 			
 			long end = System.currentTimeMillis();
 			int counter = 1;
+			int direction;
 			//With chosen span creates random requests to elevator
 			if ((end - start) / 1000F >= properties.getSpan()) {
-				floor = properties.randRequest();
+				int[] params = properties.randRequest();
+				
+				floor = params[0];
+				
+				if (params[1] % 2 == 0) {
+					direction = 1;
+				}
+				else {
+					direction = -1;
+				}
+				
+				System.out.println(String.format("Request recieved. Floor: %o, direction: %s", floor, (direction>0) ? "up" : "down"));
 				
 				//Split tasks by elevators
 				if(elevator1.getRequests().size() > elevator2.getRequests().size()) {
-					elevator2.request(floor);
+					elevator2.request(floor, direction);
 				}
 				else {
-					elevator1.request(floor);
+					elevator1.request(floor, direction);
 				}
 			}
 			//Makes elevator move
@@ -65,7 +77,8 @@ public class Main {
 		/*Since the velocity of elevator is not required,
 		 * I've hardcoded it
 		*/
-		properties.setVelocity(3);
+		System.out.println("Enter the time required by elevator to pass one floor (in seconds)");
+		properties.setVelocity(in.nextInt());
 		
 	}
 
